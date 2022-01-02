@@ -118,7 +118,7 @@ app.get("/movies/:id",async (request,response)=>{
     const {id}= request.params
     const movie = await client.db("bw251").collection("movies").findOne({id:id})
     // const movie = movies.filter((mv)=>mv.id === id)
-    response.send(movie)
+    movie?response.send(movie):response.send("Movie not found")
 })
 
 
@@ -172,7 +172,6 @@ app.put("/movies/:id",express.json(),async (req,res)=>{
   .db("bw251")
   .collection("movies")
   .updateOne(req.params,{$set:req.body})
-
   res.send(editResponse)
 })
 
