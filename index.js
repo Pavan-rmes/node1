@@ -125,6 +125,11 @@ app.get("/movies/:id",async (request,response)=>{
 const PORT = process.env.PORT
 app.listen(PORT)
 
+
+app.get("/",(req,res)=>{
+  res.send("Hello")
+})
+
 app.get("/movies",async (request,response)=>{
     const {language,rating} = request.query
 
