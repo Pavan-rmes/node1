@@ -121,7 +121,9 @@ app.get("/movies/:id",async (request,response)=>{
     response.send(movie)
 })
 
-app.listen(9000)
+
+const PORT = process.env.PORT
+app.listen(PORT)
 
 app.get("/movies",async (request,response)=>{
     const {language,rating} = request.query
