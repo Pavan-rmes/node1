@@ -3,6 +3,7 @@ import express from "express"
 import { MongoClient } from "mongodb";
 import {moviesRuter} from "./movies.js"
 import dotenv from "dotenv";
+import { userRouter } from "./user.js";
 dotenv.config();
 // import { runInNewContext } from "vm";
 // const express = require("express")
@@ -27,6 +28,8 @@ const PORT = process.env.PORT
 app.listen(PORT)
 
 app.use("/movies",moviesRuter)
+app.use("/user",userRouter)
+
 
 moviesRuter.get("/",(req,res)=>{
   res.send("Hello")
