@@ -1,6 +1,11 @@
 import express from "express";
-import { client } from "./index.js";
-import { getPassword,getUserByName ,verifyPassword} from "./helper.js";
+import { client } from "../index.js";
+import { getPassword,getUserByName } from "./helper.js";
+import bcrypt from "bcrypt"
+import Jwt from "jsonwebtoken";
+import dotenv from "dotenv"
+
+dotenv.config()
 
 const userRouter = express.Router()
 
@@ -22,18 +27,24 @@ userRouter.post("/signup",express.json(),async (req,res)=>{
 })
 
 
+
+
 userRouter.post("/login",express.json(),async(req,res)=>{
    const {userid,password} = req.body
-   const isUserExist = await getUserByName(userid)
-   if(!isUserExist){
-    res.send({message:"Invalid Credentials"})
-   }
-   const isPasswordCorrect = await verifyPassword(userid,password)
-   if(!isPasswordCorrect){
-    res.send({message:"Invalid Credentials"})
+   const userFromDb = await getUserByName(userid)
+   if(!userFromDb){
+    res.status(401).send({message:"Invalid Credentials"})
     return;
    }
-   res.send("hello")
+   const isPasswordCorrect = await bcrypt.compare(password,userFromDb.hashPassword)
+   if(isPasswordCorrect){
+    const token = Jwt.sign({pk:userFromDb._id},process.env.SECRET_KEY)
+    res.status(200).send({message:"success",token:token})
+   }
+   else{
+    res.status(401).send({message:"Invalid Credentials"})
+    return;
+   }
 
 })
 

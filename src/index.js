@@ -1,9 +1,10 @@
 // const { request, response } = require("express");
 import express from "express"
 import { MongoClient } from "mongodb";
-import {moviesRuter} from "./movies.js"
+import {moviesRuter} from "./routes/movies.js"
 import dotenv from "dotenv";
-import { userRouter } from "./user.js";
+import { userRouter } from "./routes/user.js";
+import cors from "cors"
 dotenv.config();
 // import { runInNewContext } from "vm";
 // const express = require("express")
@@ -26,7 +27,7 @@ const app = express()
 
 const PORT = process.env.PORT
 app.listen(PORT)
-
+app.use(cors())
 app.use("/movies",moviesRuter)
 app.use("/user",userRouter)
 
